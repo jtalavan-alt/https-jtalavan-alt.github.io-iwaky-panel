@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const Database = require('better-sqlite3');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -9,7 +9,7 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 
-// â•â•â• CONFIG â•â•â•
+// ═══ CONFIG ═══
 // Load .env manually (no extra dependency)
 const envPath = path.join(__dirname, '.env');
 if (fs.existsSync(envPath)) {
@@ -26,13 +26,13 @@ const NODE_ENV = process.env.NODE_ENV || 'development';
 const DOMAIN = process.env.DOMAIN || '';
 
 if (!process.env.JWT_SECRET) {
-  console.warn('âš ï¸  No JWT_SECRET en .env â€” usando clave aleatoria (las sesiones se perderÃ¡n al reiniciar)');
+  console.warn('⚠️  No JWT_SECRET en .env — usando clave aleatoria (las sesiones se perderán al reiniciar)');
   console.warn('   Crea un archivo .env con JWT_SECRET=tu-clave-secreta\n');
 }
 
 const app = express();
 
-// â•â•â• SECURITY MIDDLEWARE â•â•â•
+// ═══ SECURITY MIDDLEWARE ═══
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -65,7 +65,7 @@ app.use('/api/', apiLimiter);
 // Trust proxy (for nginx/reverse proxy)
 app.set('trust proxy', 1);
 
-// â•â•â• DATABASE â•â•â•
+// ═══ DATABASE ═══
 const dbDir = path.join(__dirname, 'db');
 if (!fs.existsSync(dbDir)) fs.mkdirSync(dbDir, { recursive: true });
 
@@ -114,7 +114,7 @@ db.exec(`
   );
 `);
 
-// â•â•â• DEFAULT DATA â•â•â•
+// ═══ DEFAULT DATA ═══
 const DEFAULT_DATA = {
   margins: { tienda: 0.23, mayorOnline: 0.07 },
   iva: [60000, 60000, 60000, 120000],
@@ -144,7 +144,7 @@ const DEFAULT_DATA = {
     { name: "Interparking VLC 70%", values: Array(12).fill(328.69), cat: "local" },
     { name: "Renting Paco 30%", values: Array(12).fill(210.60), cat: "operativo" },
     { name: "Cajas y Cargadores", values: Array(12).fill(1800), cat: "operativo" },
-    { name: "GestorÃ­a 50%", values: Array(12).fill(230), cat: "operativo" },
+    { name: "Gestoría 50%", values: Array(12).fill(230), cat: "operativo" },
     { name: "Alojamiento/Dominios", values: Array(12).fill(60), cat: "operativo" },
     { name: "Software Testeo 50%", values: Array(12).fill(600), cat: "operativo" },
     { name: "TPV Comisiones", values: Array(12).fill(500), cat: "financiero" },
@@ -153,34 +153,34 @@ const DEFAULT_DATA = {
   nominas: {
     tiendaVLC: { name: "Tienda Valencia", employees: [
       { name: "Apostu, Giovani A. (75%)", monthly: Array(12).fill(3498.39) },
-      { name: "GenovÃ©s Barea, Isabel (100%)", monthly: [2569.28,...Array(11).fill(2370.99)] },
+      { name: "Genovés Barea, Isabel (100%)", monthly: [2569.28,...Array(11).fill(2370.99)] },
       { name: "Meconi, Franco C. (100%)", monthly: [2279.33,...Array(11).fill(2667.63)] },
-      { name: "Trillini MartÃ­n, Agustina (100%)", monthly: [2903.66,...Array(11).fill(2461.89)] },
+      { name: "Trillini Martín, Agustina (100%)", monthly: [2903.66,...Array(11).fill(2461.89)] },
       { name: "Dinga Dinga, Marcel (100%)", monthly: [1282.62,...Array(11).fill(1281.57)] },
       { name: "Pardo Puertas, Pedro D. (100%)", monthly: [1282.62,...Array(11).fill(1281.57)] },
     ]},
-    direccion: { name: "DirecciÃ³n", employees: [
-      { name: "TalavÃ¡n Ruiz, Jose F. (30%)", monthly: [4322.21,...Array(11).fill(4306.79)] },
-      { name: "LledÃ³ Janonne, Carlos (30%)", monthly: [4404.84,...Array(11).fill(4426.08)] },
+    direccion: { name: "Dirección", employees: [
+      { name: "Talaván Ruiz, Jose F. (30%)", monthly: [4322.21,...Array(11).fill(4306.79)] },
+      { name: "Lledó Janonne, Carlos (30%)", monthly: [4404.84,...Array(11).fill(4426.08)] },
     ]},
     adminFinanzas: { name: "Admin / Finanzas", employees: [
-      { name: "Avia AntÃºnez, Beatriz (60%)", monthly: [1976.66,1976.48,1977.48,1978.48,1979.48,1980.48,1981.48,1982.48,1983.48,1984.48,1985.48,1986.48] },
+      { name: "Avia Antúnez, Beatriz (60%)", monthly: [1976.66,1976.48,1977.48,1978.48,1979.48,1980.48,1981.48,1982.48,1983.48,1984.48,1985.48,1986.48] },
     ]},
     rrhh: { name: "RRHH & Operaciones", employees: [
-      { name: "AugÃ© Francisco, Rodrigo (25%)", monthly: [3093.62,3045.95,3046.95,3047.95,3048.95,3049.95,3050.95,3051.95,3052.95,3053.95,3054.95,3055.95] },
+      { name: "Augé Francisco, Rodrigo (25%)", monthly: [3093.62,3045.95,3046.95,3047.95,3048.95,3049.95,3050.95,3051.95,3052.95,3053.95,3054.95,3055.95] },
     ]},
-    sat: { name: "SAT / Servicio TÃ©cnico", employees: [
-      { name: "GÃ³mez LeÃ³n, Yesid A. (40%)", monthly: [4103.24,...Array(11).fill(2767.12)] },
-      { name: "JimÃ©nez Quizhpe, Lenin A. (40%)", monthly: [2443.47,...Array(11).fill(2136.48)] },
+    sat: { name: "SAT / Servicio Técnico", employees: [
+      { name: "Gómez León, Yesid A. (40%)", monthly: [4103.24,...Array(11).fill(2767.12)] },
+      { name: "Jiménez Quizhpe, Lenin A. (40%)", monthly: [2443.47,...Array(11).fill(2136.48)] },
       { name: "Jiang, Weiwen (40%)", monthly: [3099.65,...Array(11).fill(2662.52)] },
     ]},
-    almacen: { name: "AlmacÃ©n / Test", employees: [
-      { name: "CaÃ±as BenÃ­tez, Vanesa (40%)", monthly: [2051.84,...Array(11).fill(2050.61)] },
-      { name: "Ruiz Navas, Juan JosÃ© (60%)", monthly: [2070.29,...Array(11).fill(2069.05)] },
+    almacen: { name: "Almacén / Test", employees: [
+      { name: "Cañas Benítez, Vanesa (40%)", monthly: [2051.84,...Array(11).fill(2050.61)] },
+      { name: "Ruiz Navas, Juan José (60%)", monthly: [2070.29,...Array(11).fill(2069.05)] },
     ]},
   },
   historico: {
-    aÃ±os: [2020,2021,2022,2023,2024,2025],
+    años: [2020,2021,2022,2023,2024,2025],
     lineas: {
       tiendaVLC: { name: "Ventas Tienda Valencia", mensual: Array.from({length:6},()=>Array(12).fill(0)), color: "#4f46e5" },
       b2b: { name: "Ventas B2B", mensual: Array.from({length:6},()=>Array(12).fill(0)), color: "#06b6d4" },
@@ -207,15 +207,15 @@ if (!db.prepare('SELECT 1 FROM users LIMIT 1').get()) {
   const hash = bcrypt.hashSync('iwaky2026', 10);
   db.prepare('INSERT INTO users (username, password_hash, display_name, role) VALUES (?, ?, ?, ?)')
     .run('admin', hash, 'Administrador', 'admin');
-  console.log('\n  â”Œâ”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”');
-  console.log('  â”‚  USUARIO ADMIN CREADO:                      â”‚');
-  console.log('  â”‚  Usuario: admin                              â”‚');
-  console.log('  â”‚  ContraseÃ±a: iwaky2026                       â”‚');
-  console.log('  â”‚  Â¡CAMBIA LA CONTRASEÃ‘A DESPUÃ‰S DE ENTRAR!   â”‚');
-  console.log('  â””â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”˜\n');
+  console.log('\n  ┌─────────────────────────────────────────────┐');
+  console.log('  │  USUARIO ADMIN CREADO:                      │');
+  console.log('  │  Usuario: admin                              │');
+  console.log('  │  Contraseña: iwaky2026                       │');
+  console.log('  │  ¡CAMBIA LA CONTRASEÑA DESPUÉS DE ENTRAR!   │');
+  console.log('  └─────────────────────────────────────────────┘\n');
 }
 
-// â•â•â• AUTH MIDDLEWARE â•â•â•
+// ═══ AUTH MIDDLEWARE ═══
 function authenticate(req, res, next) {
   const token = req.cookies.iwaky_token || req.headers.authorization?.replace('Bearer ', '');
   if (!token) return res.status(401).json({ error: 'No autenticado' });
@@ -228,7 +228,7 @@ function authenticate(req, res, next) {
     next();
   } catch (e) {
     res.clearCookie('iwaky_token');
-    return res.status(401).json({ error: 'SesiÃ³n expirada' });
+    return res.status(401).json({ error: 'Sesión expirada' });
   }
 }
 
@@ -238,26 +238,26 @@ function requireAdmin(req, res, next) {
 }
 
 function requireEditor(req, res, next) {
-  if (req.user.role === 'viewer') return res.status(403).json({ error: 'Sin permisos de ediciÃ³n' });
+  if (req.user.role === 'viewer') return res.status(403).json({ error: 'Sin permisos de edición' });
   next();
 }
 
-// â•â•â• AUTH ROUTES â•â•â•
+// ═══ AUTH ROUTES ═══
 
 // Login
 app.post('/api/auth/login', loginLimiter, (req, res) => {
   const { username, password } = req.body;
-  if (!username || !password) return res.status(400).json({ error: 'Usuario y contraseÃ±a requeridos' });
+  if (!username || !password) return res.status(400).json({ error: 'Usuario y contraseña requeridos' });
 
   const user = db.prepare('SELECT * FROM users WHERE username = ? AND active = 1').get(username.trim());
   if (!user || !bcrypt.compareSync(password, user.password_hash)) {
-    return res.status(401).json({ error: 'Usuario o contraseÃ±a incorrectos' });
+    return res.status(401).json({ error: 'Usuario o contraseña incorrectos' });
   }
 
   const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, { expiresIn: `${SESSION_HOURS}h` });
 
   // Update last login
-  db.prepare('UPDATE users SET last_login = new Date().toISOString() WHERE id = ?').run(user.id);
+  db.prepare('UPDATE users SET last_login = datetime("now") WHERE id = ?').run(user.id);
 
   // Store session
   const tokenHash = crypto.createHash('sha256').update(token).digest('hex');
@@ -293,11 +293,11 @@ app.get('/api/auth/me', authenticate, (req, res) => {
 // Change password
 app.post('/api/auth/change-password', authenticate, (req, res) => {
   const { currentPassword, newPassword } = req.body;
-  if (!newPassword || newPassword.length < 6) return res.status(400).json({ error: 'MÃ­nimo 6 caracteres' });
+  if (!newPassword || newPassword.length < 6) return res.status(400).json({ error: 'Mínimo 6 caracteres' });
 
   const user = db.prepare('SELECT password_hash FROM users WHERE id = ?').get(req.user.id);
   if (!bcrypt.compareSync(currentPassword, user.password_hash)) {
-    return res.status(401).json({ error: 'ContraseÃ±a actual incorrecta' });
+    return res.status(401).json({ error: 'Contraseña actual incorrecta' });
   }
 
   const hash = bcrypt.hashSync(newPassword, 10);
@@ -305,7 +305,7 @@ app.post('/api/auth/change-password', authenticate, (req, res) => {
   res.json({ success: true });
 });
 
-// â•â•â• USER MANAGEMENT (admin only) â•â•â•
+// ═══ USER MANAGEMENT (admin only) ═══
 app.get('/api/users', authenticate, requireAdmin, (req, res) => {
   const users = db.prepare('SELECT id, username, display_name, role, active, created_at, last_login FROM users ORDER BY id').all();
   res.json(users);
@@ -314,7 +314,7 @@ app.get('/api/users', authenticate, requireAdmin, (req, res) => {
 app.post('/api/users', authenticate, requireAdmin, (req, res) => {
   const { username, password, displayName, role } = req.body;
   if (!username || !password || !displayName) return res.status(400).json({ error: 'Datos incompletos' });
-  if (password.length < 6) return res.status(400).json({ error: 'ContraseÃ±a mÃ­nimo 6 caracteres' });
+  if (password.length < 6) return res.status(400).json({ error: 'Contraseña mínimo 6 caracteres' });
 
   const existing = db.prepare('SELECT 1 FROM users WHERE username = ?').get(username.trim());
   if (existing) return res.status(409).json({ error: 'El usuario ya existe' });
@@ -342,7 +342,7 @@ app.put('/api/users/:id', authenticate, requireAdmin, (req, res) => {
   res.json({ success: true });
 });
 
-// â•â•â• PANEL DATA ROUTES (require auth) â•â•â•
+// ═══ PANEL DATA ROUTES (require auth) ═══
 app.get('/api/data', authenticate, (req, res) => {
   const row = db.prepare('SELECT data, updated_at, updated_by FROM panel_data WHERE id = 1').get();
   if (!row) return res.status(404).json({ error: 'No data' });
@@ -354,7 +354,7 @@ app.put('/api/data', authenticate, requireEditor, (req, res) => {
   if (!data) return res.status(400).json({ error: 'No data' });
 
   const userName = req.user.display_name;
-  db.prepare('UPDATE panel_data SET data = ?, updated_at = new Date().toISOString(), updated_by = ? WHERE id = 1')
+  db.prepare('UPDATE panel_data SET data = ?, updated_at = datetime("now"), updated_by = ? WHERE id = 1')
     .run(JSON.stringify(data), userName);
   db.prepare('INSERT INTO changelog (section, field, new_value, changed_by) VALUES (?,?,?,?)')
     .run('full_save', 'all', 'Datos actualizados', userName);
@@ -369,7 +369,7 @@ app.get('/api/changelog', authenticate, (req, res) => {
 
 app.post('/api/reset', authenticate, requireAdmin, (req, res) => {
   const userName = req.user.display_name;
-  db.prepare('UPDATE panel_data SET data = ?, updated_at = new Date().toISOString(), updated_by = ? WHERE id = 1')
+  db.prepare('UPDATE panel_data SET data = ?, updated_at = datetime("now"), updated_by = ? WHERE id = 1')
     .run(JSON.stringify(DEFAULT_DATA), userName);
   db.prepare('INSERT INTO changelog (section, field, new_value, changed_by) VALUES (?,?,?,?)')
     .run('reset', 'all', 'Reset completo', userName);
@@ -389,11 +389,11 @@ app.get('/api/export', authenticate, (req, res) => {
   res.send(csv);
 });
 
-// â•â•â• STATIC FILES & LOGIN PAGE â•â•â•
+// ═══ STATIC FILES & LOGIN PAGE ═══
 // Serve login page for unauthenticated users
 app.get('/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
 
-// Protected panel â€” check cookie before serving
+// Protected panel — check cookie before serving
 app.get('/', (req, res) => {
   const token = req.cookies.iwaky_token;
   if (!token) return res.redirect('/login');
@@ -422,16 +422,15 @@ app.get('/admin', (req, res) => {
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-// â•â•â• START â•â•â•
+// ═══ START ═══
 app.listen(PORT, () => {
   console.log(`
-  â•”â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•—
-  â•‘   IWAKY Panel Financiero 2026 â€” Servidor Seguro     â•‘
-  â•‘                                                      â•‘
-  â•‘   Panel:    http://localhost:${PORT}                     â•‘
-  â•‘   Admin:    http://localhost:${PORT}/admin                â•‘
-  â•‘   Entorno:  ${NODE_ENV.padEnd(38)}   â•‘
-  â•šâ•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+  ╔══════════════════════════════════════════════════════╗
+  ║   IWAKY Panel Financiero 2026 — Servidor Seguro     ║
+  ║                                                      ║
+  ║   Panel:    http://localhost:${PORT}                     ║
+  ║   Admin:    http://localhost:${PORT}/admin                ║
+  ║   Entorno:  ${NODE_ENV.padEnd(38)}   ║
+  ╚══════════════════════════════════════════════════════╝
   `);
 });
-
